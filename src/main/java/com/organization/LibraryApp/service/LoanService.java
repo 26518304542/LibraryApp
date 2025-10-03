@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.organization.LibraryApp.dto.LoanDto;
 import com.organization.LibraryApp.model.Book;
 import com.organization.LibraryApp.model.Invoice;
 import com.organization.LibraryApp.model.Loan;
@@ -31,7 +32,7 @@ public class LoanService {
         this.invoiceRepo = invoiceRepo;
     }
 
-    public Loan BorrowBook(Long memberId, Long bookId) {
+    public Loan borrowBook(Long memberId, Long bookId) {
         Member member = memberRepo.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
         Book book = bookRepo.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
 
@@ -62,6 +63,8 @@ public class LoanService {
                 .build();
         invoiceRepo.save(invoice);
 
+        //LoanDto loanDto = new LoanDto(savedLoan.getId(), book.getTitle(), member.getName(), savedLoan.isReturned());
+
         return savedLoan;
     }
 
@@ -87,6 +90,8 @@ public class LoanService {
                 .build();
         invoiceRepo.save(refund);
 
+
+
         return loanRepo.save(loan);
     }
 
@@ -94,5 +99,4 @@ public class LoanService {
         return loanRepo.findByMember_IdAndReturnedFalse(memberId);
     };
 
-    //Controllerlar ile devam edilecek
 }
