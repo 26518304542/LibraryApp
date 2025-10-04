@@ -2,13 +2,14 @@ package com.organization.LibraryApp.dto;
 
 import com.organization.LibraryApp.model.Loan;
 
-public record LoanDto(Long id, String bookTitle, String memberName, boolean returned) {
+public record LoanDto(Long id, BookDto book, MemberDto member, boolean returned,double feeCharged) {
     public static LoanDto fromEntity(Loan loan) {
         return new LoanDto(
             loan.getId(),
-            loan.getBook().getTitle(),
-            loan.getMember().getName(),
-            loan.isReturned()
+            BookDto.fromEntity(loan.getBook()),
+            MemberDto.fromEntity(loan.getMember()),
+            loan.isReturned(),
+            loan.getFeeCharged()
         );
     }
 }

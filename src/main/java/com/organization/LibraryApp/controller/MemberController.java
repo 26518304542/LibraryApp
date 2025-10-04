@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.organization.LibraryApp.dto.MemberDto;
 import com.organization.LibraryApp.model.Member;
 import com.organization.LibraryApp.repository.MemberRepository;
 
@@ -25,18 +26,18 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<Member> add(@RequestBody Member member) {
-        return ResponseEntity.ok(memberRepository.save(member));
+    public ResponseEntity<MemberDto> add(@RequestBody Member member) {
+        return ResponseEntity.ok(MemberDto.fromEntity(memberRepository.save(member)));
     }
 
     @GetMapping
-    public ResponseEntity<List<Member>> getAll() {
-        return ResponseEntity.ok(memberRepository.findAll());
+    public ResponseEntity<List<MemberDto>> getAll() {
+        return ResponseEntity.ok(memberRepository.findAll().stream().map(MemberDto::fromEntity).toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Member> get(@RequestParam Long id) {
-        return ResponseEntity.ok(memberRepository.findById(id).orElseThrow(() -> new RuntimeException("Member not found")));
+    public ResponseEntity<MemberDto> get(@RequestParam("id") Long id) {
+        return ResponseEntity.ok(MemberDto.fromEntity(memberRepository.findById(id).orElseThrow(() -> new RuntimeException("Member not found"))));
     }
 
 

@@ -16,6 +16,8 @@ import com.organization.LibraryApp.repository.BookRepository;
 import com.organization.LibraryApp.repository.InvoiceRepository;
 import com.organization.LibraryApp.repository.LoanRepository;
 import com.organization.LibraryApp.repository.MemberRepository;
+import com.organization.LibraryApp.strategy.DailyFeeStrategy;
+import com.organization.LibraryApp.strategy.FeeStrategy;
 
 @Service
 public class LoanService {
@@ -23,6 +25,8 @@ public class LoanService {
     private final BookRepository bookRepo;
     private final MemberRepository memberRepo;
     private final InvoiceRepository invoiceRepo;
+    private FeeStrategy feeStrategy;
+
 
     public LoanService(LoanRepository loanRepo, BookRepository bookRepo, MemberRepository memberRepo,
             InvoiceRepository invoiceRepo) {
@@ -30,6 +34,7 @@ public class LoanService {
         this.bookRepo = bookRepo;
         this.memberRepo = memberRepo;
         this.invoiceRepo = invoiceRepo;
+        this.feeStrategy = new DailyFeeStrategy(2.0);
     }
 
     public Loan borrowBook(Long memberId, Long bookId) {
@@ -90,6 +95,8 @@ public class LoanService {
                 .build();
         invoiceRepo.save(refund);
 
+        double fee = feeStrategy.calculateFee(loan);
+        loan.setFeeCharged(fee);
 
 
         return loanRepo.save(loan);

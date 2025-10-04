@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.organization.LibraryApp.dto.BookDto;
 import com.organization.LibraryApp.model.Book;
 import com.organization.LibraryApp.service.BookService;
 
@@ -29,34 +30,34 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> add(@RequestBody Book book){
-        return ResponseEntity.ok(bookService.addBook(book));
+    public ResponseEntity<BookDto> add(@RequestBody Book book){
+        return ResponseEntity.ok(BookDto.fromEntity(bookService.addBook(book)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> get(@PathVariable Long id){
-        return ResponseEntity.ok(bookService.getBook(id));
+    public ResponseEntity<BookDto> get(@PathVariable("id") Long id){
+        return ResponseEntity.ok(BookDto.fromEntity(bookService.getBook(id)));
     }
 
     @GetMapping
-    public ResponseEntity<List<Book>> getAll(){
-        return ResponseEntity.ok(bookService.getAllBooks());
+    public ResponseEntity<List<BookDto>> getAll(){
+        return ResponseEntity.ok(bookService.getAllBooks().stream().map(BookDto::fromEntity).toList());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> update(@PathVariable Long id, @RequestBody Book book) {
-        return ResponseEntity.ok(bookService.updateBook(id, book));
+    public ResponseEntity<BookDto> update(@PathVariable("id") Long id, @RequestBody Book book) {
+        return ResponseEntity.ok(BookDto.fromEntity(bookService.updateBook(id, book)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Book>> search(@RequestParam String title) {
-        return ResponseEntity.ok(bookService.searchBooks(title));
+    public ResponseEntity<List<BookDto>> search(@RequestParam("title") String title) {
+        return ResponseEntity.ok(bookService.searchBooks(title).stream().map(BookDto::fromEntity).toList());
     }
 
 }
