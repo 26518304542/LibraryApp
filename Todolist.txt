@@ -1,0 +1,8 @@
+Create observer package under java.com.organization.LibraryApp
+Create Observer interface.
+Describe two methods for borrowbook returnbook.
+
+create interface LoanPublisher
+describe 4 methods for add,remove, notify borrow and return book
+
+create a class, it implements methods of LoanPublisher, the methods should be worked.
