@@ -1,6 +1,6 @@
 package com.organization.LibraryApp.dto;
 
-import com.organization.LibraryApp.model.Loan;
+import com.organization.LibraryApp.loan.model.Loan;
 
 public record LoanDto(Long id, BookDto book, MemberDto member, boolean returned,double feeCharged) {
     public static LoanDto fromEntity(Loan loan) {
